@@ -1,30 +1,23 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
-import pandas as pd
 
-
-source = requests.get('https://anchorplywood.com/ProductDescription.aspx?ProductId=1022')
+source = requests.get('https://finolex.com/wires-cables/')
 soup = BeautifulSoup(source.content, 'lxml')
 
+#for main in soup.find_all("div",class_='container'):
 
-img = soup.find("div",class_='col-md-5 col-sm-4 products')
-prod_img = img.li.img['src']
+img = soup.find('div',class_='abt_img')
+prod_img = img.div.img['src']
 print(prod_img)
 
-main = soup.find('div',class_='col-md-6 col-sm-6 pro-description')
-cat_name=main.h4.span.text
-print(cat_name)
-prod_name = main.h5.span.text
+desc = soup.find('div',class_='abt_txt')
+prod_name = desc.h4.text
 print(prod_name)
+prod_desc = desc.select('p')
+listToStr = ' '.join([str(elem) for elem in prod_desc])
+s = listToStr.replace('<p>','')
+product_desc = s.replace('</p>','')
+print(product_desc)
 
-prod_desc = main.div.text
-prod_desc = prod_desc.replace('\n\n','')
-prod_desc= prod_desc.replace('\n\r\n','')
-prod_desc = prod_desc.replace('\t',' ')
-print(prod_desc)
-
-main2 = soup.find('div',class_='col-md-12 col-sm-12 pro-specification')
-salient_feature = main2.ul.text.replace('\r\n\t\t','').lstrip()
-print(salient_feature.replace('\n',''))
 

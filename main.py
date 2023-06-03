@@ -1,38 +1,27 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
-import pandas as pd
 
-url='https://anchorplywood.com/ProductDescription.aspx?ProductId=1022'
-source = requests.get(url)
+source = requests.get('https://finolex.com/wires-cables/')
 soup = BeautifulSoup(source.content, 'lxml')
 
+for main in soup.find_all('div',class_='col-sm-12'):
+    img = main.find('div',class_='abt_img')
+    try:
+        prod_img = img.div.img['src']
+        print(prod_img)
+    except:
+        print('')
 
-img = soup.find("div",class_='col-md-5 col-sm-4 products')
-prod_img = img.li.img['src']
-print(prod_img)
+    desc = main.find('div',class_='abt_txt')
+    try:
+        prod_desc = desc.p
+        print(prod_desc)
+    except:
+        print('')
 
-main = soup.find('div',class_='col-md-6 col-sm-6 pro-description')
-cat_name=main.h4.span.text
-print(cat_name)
-prod_name = main.h5.span.text
-print(prod_name)
+    
 
-prod_desc = main.div.text
-prod_desc = prod_desc.replace('\n\n','')
-prod_desc= prod_desc.replace('\n\r\n','')
-prod_desc = prod_desc.replace('\t',' ')
-print(prod_desc)
-
-main2 = soup.find('div',class_='col-md-12 col-sm-12 pro-specification')
-salient_feature = main2.ul.text.replace('\r\n\t\t','').lstrip()
-print(salient_feature.replace('\n',''))
-
-dfs = pd.read_html(url)
-                                                                                                    
-df = dfs[0]
-df1 = dfs[1]
-pd.set_option('max_colwidth', 120)
-print(df)
-print(df1)
-
+# for links in main.find_all('div',class_='col-sm-12'):
+#     img = main.div.img
+#     print(img)
