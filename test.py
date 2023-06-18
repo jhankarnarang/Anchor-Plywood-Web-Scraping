@@ -2,12 +2,12 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 
-
+t= []
 def scrape(sections, file_names):
     for i in range(len(sections)):
         with open(file_names[i], 'w') as csv_file:
             csv_writer = csv.writer(csv_file)
-            csv_writer.writerow(['Prod_links','Prod_name','Image Links','Prod_About','Product_Key_Features','Prod_warranty','Prod-Warr'])
+            csv_writer.writerow(['Prod_links','Prod_name','Image Links','Prod_About','Product_Key_Features','Prod_warranty'])
 
             print(f'> {sections[i]}')
             source = requests.get(sections[i])
@@ -30,12 +30,16 @@ def scrape(sections, file_names):
 
                     for info in desc.find_all('div',class_='tab-content card'):
                         try:
-                            prod_about =info.p.text
+                            prod_abo =info.p.text
+                            prod_about = prod_abo.replace('\n','')
+                            print(prod_about)
                         except:
                             print('')
                         try :
-                            prod_info = info.ul.text
-                            prod_warr = info.find_next('div',class_='tab-pane fade',id='WARRANTY').text
+                            prod_inform = info.ul.text
+                            prod_warranty = info.find_next('div',class_='tab-pane fade',id='WARRANTY').text
+                            prod_info = prod_inform.replace('\n','')
+                            prod_warr = prod_warranty.replace('\n','')
                             print(prod_info)
                             print(prod_warr)
                             
@@ -48,8 +52,10 @@ def scrape(sections, file_names):
 
 
                         try :
-                            prod_info = info.ul.text
-                            prod_warr = info.find_next('div',class_='tab-pane fade',id='warranty').text
+                            prod_inform = info.ul.text
+                            prod_warranty = info.find_next('div',class_='tab-pane fade',id='warranty').text
+                            prod_info = prod_inform.replace('\n','')
+                            prod_warr = prod_warranty.replace('\n','')
                             print(prod_info)
                             print(prod_warr)
                             
@@ -57,7 +63,13 @@ def scrape(sections, file_names):
                             
                         except:
                             print('')
-
+                        t.append(prod_link)
+                        t.append(prod_name)
+                        t.append(prod_img)
+                        t.append(prod_about)
+                        t.append(prod_info)
+                        t.append(prod_warr)
+                        print(t)
                         csv_writer.writerow([prod_link,prod_name,prod_img,prod_about,prod_info,prod_warr])
                         
                             

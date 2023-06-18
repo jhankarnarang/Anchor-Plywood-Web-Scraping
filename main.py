@@ -7,7 +7,7 @@ def scrape(sections, file_names):
     for i in range(len(sections)):
         with open(file_names[i], 'w') as csv_file:
             csv_writer = csv.writer(csv_file)
-            csv_writer.writerow(['Prod_links','Prod_name','Image Links','Prod_About','Product_Key_Features','Prod_warranty','Prod-Warr'])
+            csv_writer.writerow(['Prod_links','Prod_name','Image Links','Prod_About','Product_Key_Features','Prod_warranty'])
 
             print(f'> {sections[i]}')
             source = requests.get(sections[i])
@@ -35,32 +35,23 @@ def scrape(sections, file_names):
                             print('')
                         try :
                             prod_info = info.ul.text
-                            prod_warr = info.find_next('div',class_='tab-pane fade',id='WARRANTY').text
-                            print(prod_info)
-                            print(prod_warr)
+                            prod_warr1 = info.find_next('div',class_='tab-pane fade',id='WARRANTY').text
+                            
                             
                         except:
                             print('')
-                        
-                            
-                            
                             
 
 
                         try :
                             prod_info = info.ul.text
                             prod_warr = info.find_next('div',class_='tab-pane fade',id='warranty').text
-                            print(prod_info)
-                            print(prod_warr)
-                            
                             
                             
                         except:
                             print('')
-
-                        csv_writer.writerow([prod_link,prod_name,prod_img,prod_about,prod_info,prod_warr])
-                        
                             
+                        csv_writer.writerow([prod_name,prod_img,prod_about,prod_info,prod_warr,prod_warr1])
 
 
             
